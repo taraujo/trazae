@@ -14,15 +14,23 @@ mongoose.connect('mongodb+srv://teste:teste@trazaeappcluster-jb7ku.mongodb.net/t
     useUnifiedTopology: true,
 });
 
-/**
- * Routes
- */
 app.use(express.json());
-app.use(routes);
 
 /**
  * Cors-Origin
  */
-app.use(cors());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "*");
+    
+    app.use(cors());
+
+    return next();
+});
+
+/**
+ * Routes
+ */
+app.use(routes);
 
 app.listen(3333);

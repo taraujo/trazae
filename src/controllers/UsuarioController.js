@@ -15,7 +15,7 @@ module.exports = {
     * @param {Response} response 
     */
     async store(request, response) {
-        const { nome, email, password } = request.body;
+        const { name, email, password } = request.body;
 
         try {
             let usuario = await Usuario.findOne({ email });
@@ -28,7 +28,7 @@ module.exports = {
             }
 
             usuario = await Usuario.create({
-                nome, email, password
+                name, email, password
             }); 
 
             return response.json(usuario);
