@@ -1,0 +1,20 @@
+@extends('layouts.admin.base')
+
+@section('title', '{{modelo}}s')
+
+@section('content')
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Cadastrar {{modelo}}(s)</h4>
+        <p class="card-description">
+        </p>
+		<form class="forms-sample csrf_token" action="{!! route('{{objeto}}.criar') !!}" method="POST">
+            @include('{{path_view}}._form')
+            <button type="submit" class="btn btn-primary mr-2"><i class="fa fa-send-o"></i> Enviar</button>
+		</form>
+    </div>
+	<br class="clearfix" />
+</div>
+
+@endsection

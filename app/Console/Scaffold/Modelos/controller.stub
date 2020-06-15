@@ -1,0 +1,134 @@
+<?php
+
+namespace App\Http\Controllers{{path}};
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Entities{{path}}\{{modelo}};
+use App\Http\Services{{path}}\{{modelo}}Service;
+use App\Http\Requests{{path}}\{{modelo}}Request;
+
+class {{modelo}}Controller extends Controller
+{
+    /**
+     * @var {{modelo}}Service
+     */
+    protected $service;
+
+    /**
+     * {{modelo}}Controller constructor.
+     * @param {{modelo}}Service $service
+     */
+    public function __construct({{modelo}}Service $service)
+    {
+        $this->service = $service;
+    } 
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function cadastrar()
+    {
+        ${{objeto}} = new {{modelo}}();
+
+    	return view('{{path_view}}.cadastrar')
+            ->with('{{objeto}}', ${{objeto}});	
+    }
+
+    /**
+     * @param {{modelo}}Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function criar({{modelo}}Request $request)
+    {
+        try {
+            ${{objeto}} = $this->service->create($request->input());
+
+            return redirect()->route('{{route_detalhar}}', 
+                ['id' => ${{objeto}}->id]);
+        } catch (RegraException $e) {
+            flash($e->getMessage())->error();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            flash('Não foi possível salvar as informações do(a) {{modelo}}.' .
+                'Favor informe ao suporte do sistema...')->error();
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     * @throws \Exception
+     */
+    public function editar(Request $request)
+    {
+        ${{objeto}} = $this->service->findById($request->id);
+
+        return view('{{path_view}}.editar')
+            ->with('{{objeto}}', ${{objeto}});
+    }
+
+    /**
+     * @param {{modelo}}Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    public function atualizar({{modelo}}Request $request)
+    {
+        try {
+            ${{objeto}} = $this->service->merge($request->input('id'), $request->input());
+
+            return redirect()->route('{{route_detalhar}}', 
+                ['id' => ${{objeto}}->id]);
+        } catch (RegraException $e) {
+            flash($e->getMessage())->error();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            flash('Não foi possível salvar as informações do(a) {{modelo}}.' .
+                'Favor informe ao suporte do sistema...')->error();
+        }
+    }
+
+    /**
+     * @param id
+     * @return $this
+     * @throws \Exception
+     */
+    public function detalhar($id)
+    {
+        ${{objeto}} = $this->service->findById($id);
+
+        return view('{{path_view}}.detalhar')
+            ->with('{{objeto}}', ${{objeto}});
+    }
+
+    /**
+     * @return $this
+     * @throws \Exception
+     */
+    public function listar()
+    {
+        ${{objeto}}s = $this->service->all();
+
+        return view('{{path_view}}.listar')
+            ->with('{{objeto}}s', ${{objeto}}s);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function remover(Request $request)
+    {
+        try {
+            $this->service->delete($request->id);
+            
+            flash('As informações do(a) {{objeto}} foram removidos(as) com sucesso!')->success();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            flash('Não foi possível remover as informações do {{objeto}}! Favor entre em contato com o administrador do sistema...')->error();
+            return response('Não foi possível remover as informações!', 400);
+        }
+        return response('As informações do(a) {{objeto}} foram removidos(as) com sucesso!', 200);
+    }      
+}

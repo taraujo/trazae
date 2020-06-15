@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Http\Repositories{{path}};
+
+use App\Http\Repositories\Repository;
+use App\Http\Entities{{path}}\{{modelo}};
+
+class {{modelo}}Repository extends Repository
+{
+    protected $entity;
+
+    /**
+     * {{modelo}}Repository constructor.
+     */
+    public function __construct({{modelo}} $entity)
+    {
+        $this->entity = $entity;
+    }               
+}

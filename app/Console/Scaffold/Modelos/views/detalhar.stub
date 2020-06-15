@@ -1,0 +1,16 @@
+@extends('layouts.admin.base')
+
+@section('title', '{{modelo}}s')
+
+@section('content')
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Detalhar {{modelo}}(s)</h4>
+        <p class="card-description">
+        </p>
+    </div>
+	<br class="clearfix" />
+</div>
+
+@endsection

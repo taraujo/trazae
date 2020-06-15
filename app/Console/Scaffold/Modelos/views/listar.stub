@@ -1,0 +1,49 @@
+
+@extends('layouts.admin.base')
+
+@section('title', '{{modelo}}s')
+
+@section('content')
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Dados e Controle de {{modelo}}(s)
+            <a href="{{ route('{{objeto}}.cadastrar') }}" class="btn btn-primary btn-sm mdi mdi-plus">
+                Novo {{modelo}}</a></h4>
+        <p class="card-description">
+        </p>
+		<div class="table-responsive">
+			<table id="table" class="display table datatable table-hover table-condensed table-striped">
+				<thead>
+					<tr>
+						<th></th>
+						<th class="text-center col-edit-button">Editar</th>
+                        <th class="text-center col-edit-button">Remover</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach(${{objeto}}s as ${{objeto}})
+						<tr>
+							<td></td>
+                            <td class="text-center col-edit-button">
+                                <a href="{{ route('{{objeto}}.editar',['id' => ${{objeto}}->id]) }}"
+                                    class="btn-link font-weight-bold edit-button">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </td>
+                            <td class="text-center col-remove-button">
+                                <a href="{{ route('{{objeto}}.remover', ['id' => ${{objeto}}->id])  }}"
+                                    class="btn-link font-weight-bold remove-button text-danger">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+						</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+    </div>
+	<br class="clearfix" />
+</div>
+
+@endsection
