@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -227,6 +228,12 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        /**
+         * Helpers
+         */
+        'SessionHelper' => App\Http\Helpers\SessionHelper::class,
+        'DataHelper' => App\Http\Helpers\DataHelper::class,
+        'MonetarioHelper' => App\Http\Helpers\MonetarioHelper::class,
     ],
 
 ];
