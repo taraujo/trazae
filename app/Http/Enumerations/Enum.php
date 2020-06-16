@@ -15,32 +15,7 @@ abstract class Enum
     public static function values()
     {
         $reflect = new ReflectionClass(get_called_class());
-        return collect($reflect->getConstants()['LABEL']);
-    }
-
-    /**
-     * Return string representation of this enum
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Tries to set the value  of this enum
-     *
-     * @param string $value
-     * @throws \Exception
-     */
-    public function setValue($value)
-    {
-        if ($this->isValidEnumValue($value)) {
-            $this->value = $value;
-        } else {
-            throw new \Exception("Invalid type specified!");
-        }
+        return collect($reflect->getConstants());
     }
 
     /**
@@ -50,9 +25,9 @@ abstract class Enum
      * @return bool
      * @throws \ReflectionException
      */
-    public function isValidEnumValue($checkValue)
+    public static function isValidEnumValue($checkValue)
     {
-        $reflector = new ReflectionClass(get_class($this));
+        $reflector = new ReflectionClass(get_called_class());
         foreach ($reflector->getConstants() as $validValue) {
             if ($validValue == $checkValue) {
                 return true;

@@ -34,3 +34,15 @@ Route::group([
     Route::put('/', 'Api\UsuarioController@update');
     Route::delete('/{id}', 'Api\UsuarioController@destroy');
 });
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'fretes'
+], function ($router) {
+    Route::get('/', 'Api\FreteController@index');
+    Route::get('/{id}', 'Api\FreteController@show');
+    Route::put('/', 'Api\FreteController@update');
+    Route::delete('/{id}', 'Api\FreteController@destroy');
+    Route::post('/agendar', 'Api\FreteController@agendar');
+    Route::post('/calcular', 'Api\FreteController@calcular');
+});
