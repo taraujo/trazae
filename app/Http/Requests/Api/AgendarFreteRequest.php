@@ -22,6 +22,13 @@ class AgendarFreteRequest extends ApiFormRequest
     public function rules()
     {
         return [
+            "origem_latitude" => 'required',
+            "origem_longitude" => 'required',
+            "destino_latitude" => 'required',
+            "destino_longitude" => 'required',
+            "distancia" => 'required',
+            "tipo_veiculo" => 'required',
+            "data_frete" => 'required',
         ];
     }
 }

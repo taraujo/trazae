@@ -6,14 +6,18 @@ use App\Frete;
 use App\Http\Controllers\Controller;
 use App\Http\Enumerations\TipoVeiculo;
 use App\Http\Helpers\DataHelper;
+use App\Http\Helpers\MonetarioHelper;
 use App\Http\Requests\Api\AgendarFreteRequest;
 use App\Http\Requests\Api\CalcularFreteRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Expr\Cast\Double;
 
 class FreteController extends Controller
 {
+    private const PRECO_GASOLINA = 4.20;
+
     /**
      * Display a listing of the resource.
      *
@@ -55,7 +59,7 @@ class FreteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(AgendarFreteRequest $request)
     {
         try {
             $id = $request->get('id');
@@ -65,7 +69,7 @@ class FreteController extends Controller
                 "origem_longitude",
                 "destino_latitude",
                 "destino_longitude",
-                "data_agendamento",
+                "distancia",
                 "tipo_veiculo",
                 "data_frete"
             ]);
@@ -77,7 +81,10 @@ class FreteController extends Controller
                 (1 - Moto, 2 - Pick Up, 3 - Caminhão)"], 400);
             }
 
-            $data["valor"] = rand(0, 100);
+            $tipoVeiculo = $data["tipo_veiculo"];
+            $distancia = (Double) $data["distancia"];
+            $data["valor"] = (($distancia * self::PRECO_GASOLINA)
+                + (($distancia * self::PRECO_GASOLINA) * 0.4)) * $tipoVeiculo;
 
             $frete = Frete::find($id);
             if (!isset($frete)) {
@@ -125,10 +132,7 @@ class FreteController extends Controller
     {
         try {
             $data = $request->only([
-                "origem_latitude",
-                "origem_longitude",
-                "destino_latitude",
-                "destino_longitude",
+                "distancia",
                 "tipo_veiculo"
             ]);
 
@@ -137,7 +141,12 @@ class FreteController extends Controller
                 (1 - Moto, 2 - Pick Up, 3 - Caminhão)"], 400);
             }
 
-            return response()->json(["valor" => rand(0, 100)]);
+            $tipoVeiculo = $data["tipo_veiculo"];
+            $distancia = (Double) $data["distancia"];
+            $data["valor"] = (($distancia * self::PRECO_GASOLINA)
+                + (($distancia * self::PRECO_GASOLINA) * 0.4)) * $tipoVeiculo;
+
+            return response()->json($data);
         } catch (Exception $exception) {
             Log::info($exception->getMessage() . $exception->getTraceAsString());
             return response()->json($exception->getMessage(), 400);
@@ -160,7 +169,7 @@ class FreteController extends Controller
                 "origem_longitude",
                 "destino_latitude",
                 "destino_longitude",
-                "data_agendamento",
+                "distancia",
                 "tipo_veiculo",
                 "data_frete"
             ]);
@@ -173,7 +182,10 @@ class FreteController extends Controller
                 (1 - Moto, 2 - Pick Up, 3 - Caminhão)"], 400);
             }
 
-            $data["valor"] = rand(0, 100);
+            $tipoVeiculo = $data["tipo_veiculo"];
+            $distancia = (Double) $data["distancia"];
+            $data["valor"] = (($distancia * self::PRECO_GASOLINA)
+                + (($distancia * self::PRECO_GASOLINA) * 0.4)) * $tipoVeiculo;
 
             $user = Frete::create($data);
 

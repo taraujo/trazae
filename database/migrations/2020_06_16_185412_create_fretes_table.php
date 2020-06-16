@@ -19,6 +19,7 @@ class CreateFretesTable extends Migration
             $table->double("origem_longitude");
             $table->double("destino_latitude");
             $table->double("destino_longitude");
+            $table->double("distancia");
             $table->date("data_frete")->default('now()');
             $table->integer("tipo_veiculo");
             $table->decimal('valor', 10, 2);
