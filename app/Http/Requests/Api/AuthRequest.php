@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
-class UsuarioRequest extends ApiFormRequest
+class AuthRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,8 @@ class UsuarioRequest extends ApiFormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
             'email' => 'required',
-            'password' => 'required|min:6',
-            'samePassword' => "required|min:6|same:password"
+            'password' => 'required'
         ];
     }
 }
