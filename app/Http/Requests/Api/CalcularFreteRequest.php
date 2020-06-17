@@ -22,8 +22,8 @@ class CalcularFreteRequest extends ApiFormRequest
     public function rules()
     {
         return [
-            "distancia" => 'required',
-            "tipo_veiculo" => 'required',
+            // "distancia" => 'required',
+            // "tipo_veiculo" => 'required',
         ];
     }
 }

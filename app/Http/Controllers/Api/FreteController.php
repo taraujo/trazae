@@ -131,6 +131,7 @@ class FreteController extends Controller
     public function calcular(CalcularFreteRequest $request)
     {
         try {
+            \Log::info($request->input());
             $data = $request->only([
                 "distancia",
                 "tipo_veiculo"
@@ -162,6 +163,7 @@ class FreteController extends Controller
     public function agendar(AgendarFreteRequest $request)
     {
         try {
+            \Log::info($request->input());
             $user = auth('api')->user();
 
             $data = $request->only([
