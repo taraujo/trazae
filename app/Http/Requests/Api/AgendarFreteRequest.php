@@ -28,7 +28,6 @@ class AgendarFreteRequest extends ApiFormRequest
             "destino_longitude" => 'required',
             "distancia" => 'required',
             "tipo_veiculo" => 'required',
-            "data_frete" => 'required',
         ];
     }
 }

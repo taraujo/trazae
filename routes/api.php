@@ -36,7 +36,7 @@ Route::group([
 });
 
 Route::group([
-    // 'middleware' => 'api',
+    'middleware' => 'api',
     'prefix' => 'fretes'
 ], function ($router) {
     Route::get('/', 'Api\FreteController@index');

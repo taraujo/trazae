@@ -9,6 +9,7 @@ use App\Http\Helpers\DataHelper;
 use App\Http\Helpers\MonetarioHelper;
 use App\Http\Requests\Api\AgendarFreteRequest;
 use App\Http\Requests\Api\CalcularFreteRequest;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -131,6 +132,7 @@ class FreteController extends Controller
     public function calcular(CalcularFreteRequest $request)
     {
         try {
+            \Log::info("/calcular");
             \Log::info($request->input());
             $data = $request->only([
                 "distancia",
@@ -146,6 +148,8 @@ class FreteController extends Controller
             $distancia = (Double) $data["distancia"];
             $data["valor"] = (($distancia * self::PRECO_GASOLINA)
                 + (($distancia * self::PRECO_GASOLINA) * 0.4)) * $tipoVeiculo;
+
+            $data["valor"] = MonetarioHelper::formatarMoedaLabel($data["valor"]);
 
             return response()->json($data);
         } catch (Exception $exception) {
@@ -163,8 +167,8 @@ class FreteController extends Controller
     public function agendar(AgendarFreteRequest $request)
     {
         try {
+            \Log::info("/agendar");
             \Log::info($request->input());
-            $user = auth('api')->user();
 
             $data = $request->only([
                 "origem_latitude",
@@ -176,8 +180,17 @@ class FreteController extends Controller
                 "data_frete"
             ]);
 
-            $data["usuario_id"] = $user->id;
-            $data["data_frete"] = DataHelper::stringToCarbonDate($data["data_frete"]);
+            $user = auth('api')->user();
+            if (!$user) {
+                return response()->json(["error" => "Usuário não encontrado ou token inválido!"], 400);
+            }
+            $data['usuario_id'] = $user->id;
+
+            if (isset($data["data_frete"])) {
+                $data["data_frete"] = DataHelper::stringToCarbonDate($data["data_frete"]);
+            } else {
+                $data["data_frete"] = Carbon::now();
+            }
 
             if (!TipoVeiculo::isValidEnumValue($data["tipo_veiculo"])) {
                 return response()->json(["error" => "Campo 'tipo_veiculo' inválido -
@@ -190,6 +203,8 @@ class FreteController extends Controller
                 + (($distancia * self::PRECO_GASOLINA) * 0.4)) * $tipoVeiculo;
 
             $user = Frete::create($data);
+
+            $user->valor = MonetarioHelper::formatarMoedaLabel($data["valor"]);
 
             return response()->json($user);
         } catch (Exception $exception) {
